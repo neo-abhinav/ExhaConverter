@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ExhaConverter - Ultimate File Converter</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Style: Modern, responsive, many effects and icons, 500+ lines -->
+  <style>
+    :root {
+      --primary: #4e4376;
+      --secondary: #2b5876;
+      --accent: #ff7043;
+      --success: #00c853;
+      --danger: #e53935;
+      --info: #29b6f6;
+      --warning: #ffa000;
+      --light: #ffffff;
+      --dark: #333333;
+      --radius: 1.2rem;
+      --shadow: 0 8px 32px rgba(44,62,80,0.24);
+      --code-bg: #f3f5f8;
+      --font: 'Inter', Arial, sans-serif;
+      --icon-size: 45px;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      background: linear-gradient(120deg, var(--secondary) 0%, var(--primary) 100%);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      font-family: var(--font);
+    }
+    body {
+      min-height: 100vh;
+      padding-bottom: 80px;
+    }
+    .container {
+      max-width: 950px;
+      margin: 48px auto 32px auto;
+      background: rgba(255,255,255,0.97);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 3.3rem 2.2rem 2.2rem 2.2rem;
+      min-height: 700px;
+      position: relative;
+      animation: fadein 1.1s;
+    }
+    @keyframes fadein {
+      from { opacity: 0; transform: translateY(40px);}
+      to { opacity: 1; transform: none;}
+    }
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 900;
+      text-align: center;
+      letter-spacing: 1px;
+      color: var(--primary);
+      margin-bottom: 0.6rem;
+      text-shadow: 0 7px 18px #2b587633;
+    }
+    .subtitle {
+      text-align: center;
+      font-size: 1.21rem;
+      color: #444;
+      margin-bottom: 2.4rem;
+      font-style: italic;
+    }
+    .upload-area {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 2.7rem;
+    }
+    .upload-label {
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      color: #fff;
+      font-weight: bold;
+      padding: 1rem 2.8rem;
+      border-radius: 2.2rem;
+      font-size: 1.26rem;
+      cursor: pointer;
+      box-shadow: 0 5px 20px #4e43761c;
+      transition: background 0.2s;
+      outline: none;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .upload-label:hover, .upload-label:focus {
+      background: linear-gradient(90deg, var(--accent), var(--primary));
+    }
+    .upload-label input[type=file] {
+      display: none;
+    }
+    .formats-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.2rem 2rem;
+      margin-bottom: 2.5rem;
+    }
+    .format-icon-box {
+      background: #fff;
+      border: 1.5px solid #e0e5ee;
+      border-radius: var(--radius);
+      padding: 0.9rem 1.5rem;
+      box-shadow: 0 1px 6px #4e437610;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 85px;
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: #444;
+      transition: box-shadow 0.17s;
+      user-select: none;
+    }
+    .format-icon-box svg {
+      width: var(--icon-size);
+      height: var(--icon-size);
+      margin-bottom: 0.1rem;
+    }
+    .files-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2.6rem 2rem;
+      justify-content: center;
+    }
+    .file-card {
+      background: linear-gradient(120deg, #f8fafc 60%,#e0e7ef 100%);
+      border-radius: var(--radius);
+      box-shadow: 0 2px 16px #4e43761a;
+      padding: 1.3rem 2.1rem;
+      display: flex;
+      align-items: center;
+      gap: 1.6rem;
+      min-width: 340px;
+      margin-bottom: 1.8rem;
+      flex-direction: row;
+      position: relative;
+      animation: fadein 0.85s;
+    }
+    .file-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      font-size: 1.08rem;
+    }
+    .select-format {
+      font-size: 1.03rem;
+      padding: 0.43rem 1rem;
+      border-radius: 1.1rem;
+      border: 1px solid #bbb;
+      background: #f6f7fa;
+      margin-right: 1.2rem;
+      outline: none;
+      font-weight: 500;
+      transition: border 0.15s;
+    }
+    .select-format:focus {
+      border: 1.5px solid var(--primary);
+    }
+    .file-actions {
+      margin-top: 0.33rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      align-items: center;
+    }
+    .btn {
+      background: linear-gradient(90deg, var(--primary), var(--success));
+      color: #fff;
+      border: none;
+      border-radius: 1.1rem;
+      padding: 0.7rem 2.3rem;
+      font-weight: bold;
+      font-size: 1.01rem;
+      cursor: pointer;
+      transition: background 0.18s;
+      box-shadow: 0 2px 10px #1976d218;
+      margin-right: 1rem;
+      outline: none;
+    }
+    .btn.download {
+      background: linear-gradient(90deg, var(--accent), var(--warning));
+      margin-right: 0;
+    }
+    .btn:active {
+      opacity: 0.85;
+    }
+    .archive-list {
+      margin: 2.2rem 0 0 0;
+      background: #f3f7fa;
+      border-radius: 1.1rem;
+      padding: 2.2rem 1.2rem;
+      box-shadow: 0 6px 20px #1976d218;
+      display: flex;
+      flex-direction: column;
+      gap: 1.3rem;
+    }
+    .archive-item {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      background: #fff;
+      border-radius: 0.7rem;
+      padding: 0.7rem 1.6rem 0.7rem 1.1rem;
+      box-shadow: 0 2px 8px #4e437610;
+      font-size: 1.1rem;
+      animation: fadein 0.5s;
+    }
+    .btn.archive-download {
+      background: linear-gradient(90deg, var(--success), var(--accent));
+      margin-left: auto;
+      padding: 0.5rem 1.6rem;
+      font-size: 0.98rem;
+    }
+    .btn.zip-all {
+      background: linear-gradient(90deg, var(--primary), var(--warning));
+      color: #fff;
+      border-radius: 1.2rem;
+      padding: 0.9rem 2.5rem;
+      font-weight: bold;
+      font-size: 1.13rem;
+      margin: 1.7rem auto 0;
+      display: block;
+      box-shadow: 0 2px 10px #546E7A18;
+    }
+    .footer {
+      margin-top: 44px;
+      color: #999;
+      font-size: 1.08rem;
+      text-align: center;
+      padding: 1.2rem 0 0 0;
+      border-top: 1px solid #e0e0e0;
+      background: transparent;
+      font-family: var(--font);
+      letter-spacing: 0.02em;
+    }
+    .link {
+      color: var(--primary);
+      text-decoration: underline;
+      cursor: pointer;
+      transition: color .14s;
+    }
+    .link:hover {
+      color: var(--accent);
+    }
+    /* Loader spinner */
+    .spinner {
+      display: inline-block;
+      width: 28px;
+      height: 28px;
+      border: 3px solid #e0e7ef;
+      border-top: 3px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+      margin-right: 0.7rem;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg);}
+      100% { transform: rotate(360deg);}
+    }
+    /* Responsive */
+    @media (max-width: 700px) {
+      .container { padding: 1.1rem 0.2rem;}
+      .file-card, .archive-item { min-width: 0; width: 98vw;}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>ExhaConverter</h1>
+    <div class="subtitle">
+      The <b>Ultimate File Converter</b>.<br>
+      Upload any file, select format, convert, and download.<br>
+      Supports archives, batch downloads, 10+ modern formats, beautiful icons & UI!
+    </div>
+    <!-- Upload Button -->
+    <div class="upload-area">
+      <label class="upload-label">
+        <svg width="27" height="27" fill="none" viewBox="0 0 24 24"><path fill="#fff" d="M12 16.25a.75.75 0 0 1-.75-.75V7.81l-2.97 2.97a.75.75 0 1 1-1.06-1.06l4.25-4.25a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 1 1-1.06 1.06l-2.97-2.97v7.69a.75.75 0 0 1-.75.75Z"/><path fill="#fff" d="M20.25 17.25A2.75 2.75 0 0 1 17.5 20h-11a2.75 2.75 0 0 1-2.75-2.75V16a.75.75 0 0 1 1.5 0v1.25c0 .69.56 1.25 1.25 1.25h11c.69 0 1.25-.56 1.25-1.25V16a.75.75 0 0 1 1.5 0v1.25Z"/></svg>
+        <span>Upload File or Archive</span>
+        <input type="file" id="fileInput" />
+      </label>
+    </div>
+    <!-- Supported Formats -->
+    <div class="formats-list" id="formatsList"></div>
+    <!-- Uploaded Files List -->
+    <div class="files-list" id="filesList"></div>
+    <!-- Archive Contents List -->
+    <div class="archive-list" id="archiveList" style="display:none"></div>
+    <div class="footer">
+      <b>ExhaConverter</b> &copy; <span id="year"></span> &mdash; Supports PDF, DOCX, TXT, JPG, PNG, MP3, WAV, MP4, ZIP, CSV, JSON, XML, SVG, HTML & more.<br>
+      (Demo: Some conversions are simulated. Real converters use extra libraries.)
+    </div>
+  </div>
+  <!-- Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+  <!-- ExhaConverter Logic -->
+  <script>
+    // Format/Icons map (SVG icons, free or open source styled)
+    const formatIcons = {
+      pdf: `<svg width="45" height="45" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="10" fill="#E53935"/><text x="8" y="33" font-size="22" fill="#fff" font-weight="bold">PDF</text></svg>`,
+      docx: `<svg width="45" height="45" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="10" fill="#1976D2"/><text x="6" y="33" font-size="22" fill="#fff" font-weight="bold">DOCX</text></svg>`,
+      txt: `<svg width="45" height="45" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="10" fill="#757575"/><text x="10" y="33" font-size="22" fill="#fff" font-weight="bold">TXT</text></svg>`,
+      jpg: `<svg width="45" height="45" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="10" fill="#FBC02D"/><text x="10" y="33" font-size="22" fill="#fff" font-weight="bold">JPG</text></svg>`,
+      png: `<svg width="45" height="45" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="10" fill="#29B6F6"/><text x="9" y="33" font-size="22" fill="#fff" font-weight="bold">PNG</text></svg>`,
+      mp3: `<svg width="45" height="45" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="10" fill="#8E24AA"/><text x="10" y="33" font-size="22" fill="#fff" font-weight="bold">MP3</text></svg>`,
+      wav: `<svg width="45" height="45" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="10" fill="#00C853"/><text x="9" y="33" font-size="22" fill="#fff" font-weight="bold">WAV</text></svg>`,
+      mp4: `<svg width="45" height="45" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="10" fill="#D81B60"/><text x="11" y="33" font-size="22" fill="#fff" font-weight="bold">MP4</text></svg>`,
+      zip: `<svg width="45" height="45" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="10" fill="#546E7A"/><text x="11" y="33" font-size="22" fill="#fff" font-weight="bold">ZIP</text></svg>`,
+      csv: `<svg width="45" height="45" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="10" fill="#388E3C"/><text x="10" y="33" font-size="22" fill="#fff" font-weight="bold">CSV</text></svg>`,
+      json: `<svg width="45" height="45" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="10" fill="#FFA000"/><text x="5" y="33" font-size="22" fill="#fff" font-weight="bold">JSON</text></svg>`,
+      xml: `<svg width="45" height="45" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="10" fill="#0288D1"/><text x="11" y="33" font-size="22" fill="#fff" font-weight="bold">XML</text></svg>`,
+      svg: `<svg width="45" height="45" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="10" fill="#FF7043"/><text x="10" y="33" font-size="22" fill="#fff" font-weight="bold">SVG</text></svg>`,
+      html: `<svg width="45" height="45" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="10" fill="#F44336"/><text x="7" y="33" font-size="22" fill="#fff" font-weight="bold">HTML</text></svg>`
+    };
+    // All supported formats
+    const allFormats = Object.keys(formatIcons);
+
+    // Format detection
+    function detectFormat(fileName) {
+      let ext = fileName.split('.').pop().toLowerCase();
+      if (allFormats.includes(ext)) return ext;
+      if (ext === "jpeg") return "jpg";
+      if (ext === "htm") return "html";
+      return null;
+    }
+
+    // Render supported formats
+    function renderFormatsList() {
+      const formatsList = document.getElementById("formatsList");
+      formatsList.innerHTML = allFormats.map(fmt => `
+        <div class="format-icon-box" title="${fmt.toUpperCase()}">
+          ${formatIcons[fmt]}
+          <span>${fmt.toUpperCase()}</span>
+        </div>
+      `).join('');
+    }
+
+    // Dummy conversion logic for demo (real code would use real libraries)
+    async function convertFile(inputFile, from, to) {
+      if (from === to) return inputFile;
+      // Textual conversion
+      if (
+        ["txt", "csv", "json", "xml", "html"].includes(from) &&
+        ["txt", "csv", "json", "xml", "html"].includes(to)
+      ) {
+        let text = await inputFile.text();
+        if (to === "json") text = JSON.stringify({ content: text });
+        if (to === "txt" || to === "csv" || to === "html") text = String(text);
+        if (to === "xml") text = `<root>${text}</root>`;
+        if (to === "csv") text = text.replace(/\n/g, ",");
+        if (to === "html") text = `<pre>${text}</pre>`;
+        return new File([text], inputFile.name.replace(/\.[^.]+$/, `.${to}`), { type: "text/" + to });
+      }
+      // Images (simulate PNG <-> JPG)
+      if (
+        (from === "png" && to === "jpg") ||
+        (from === "jpg" && to === "png") ||
+        (from === "svg" && (to === "png" || to === "jpg"))
+      ) {
+        const blob = await inputFile.arrayBuffer();
+        return new File([blob], inputFile.name.replace(/\.[^.]+$/, `.${to}`), { type: "image/" + to });
+      }
+      // Audio (simulate mp3 <-> wav)
+      if (
+        (from === "mp3" && to === "wav") ||
+        (from === "wav" && to === "mp3")
+      ) {
+        const blob = await inputFile.arrayBuffer();
+        return new File([blob], inputFile.name.replace(/\.[^.]+$/, `.${to}`), { type: "audio/" + to });
+      }
+      // PDF/DOCX/MP4 etc - just mime change in demo
+      if (
+        ["pdf", "docx", "mp4"].includes(from) &&
+        ["pdf", "docx", "mp4"].includes(to)
+      ) {
+        const blob = await inputFile.arrayBuffer();
+        return new File([blob], inputFile.name.replace(/\.[^.]+$/, `.${to}`), { type: "application/" + to });
+      }
+      // Fallback
+      return inputFile;
+    }
+
+    // Render uploaded file
+    function renderFilesList(files, convertedFiles, onConvert, onDownload, processing) {
+      const filesList = document.getElementById("filesList");
+      filesList.innerHTML = '';
+      files.forEach((file, i) => {
+        const ext = file.ext;
+        const icon = formatIcons[ext] || '';
+        const select = `
+          <select class="select-format" data-file-idx="${i}" ${processing ? 'disabled' : ''}>
+            ${allFormats.map(fmt => `<option value="${fmt}" ${fmt === file.format ? 'selected' : ''}>${fmt.toUpperCase()}</option>`).join('')}
+          </select>
+        `;
+        filesList.innerHTML += `
+          <div class="file-card" data-file-idx="${i}">
+            <div>${icon}</div>
+            <div class="file-info">
+              <span style="font-weight:bold;font-size:1.13rem">${file.name}</span>
+              <span style="color:#666;font-size:0.98rem">Detected: <b>${ext.toUpperCase()}</b></span>
+              <div style="margin:0.5rem 0">${select}</div>
+              <div class="file-actions">
+                <button class="btn convert-btn" ${processing ? 'disabled' : ''}>${processing ? '<span class="spinner"></span>Processing...' : 'Convert'}</button>
+                <button class="btn download download-btn" ${processing || (file.format === file.ext && !convertedFiles[i]) ? 'disabled' : ''}>Download</button>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      // Hook up events
+      filesList.querySelectorAll('.select-format').forEach(sel => {
+        sel.onchange = e => {
+          const idx = Number(sel.getAttribute('data-file-idx'));
+          files[idx].format = sel.value;
+          renderFilesList(files, convertedFiles, onConvert, onDownload, processing);
+        };
+      });
+      filesList.querySelectorAll('.convert-btn').forEach((btn, idx) => {
+        btn.onclick = () => onConvert(idx);
+      });
+      filesList.querySelectorAll('.download-btn').forEach((btn, idx) => {
+        btn.onclick = () => onDownload(idx);
+      });
+    }
+
+    // Render archive (zip) contents
+    function renderArchiveList(archiveContents, archiveConverted, onConvert, onDownload, onZipAll, processing) {
+      const archiveList = document.getElementById("archiveList");
+      if (!archiveContents.length) {
+        archiveList.style.display = 'none';
+        archiveList.innerHTML = '';
+        return;
+      }
+      archiveList.style.display = '';
+      archiveList.innerHTML = `<h3 style="margin:0 0 1.3rem 0;"><span role="img" aria-label="archive">📦</span> Archive Contents (${archiveContents.length} files)</h3>`;
+      archiveContents.forEach((item, idx) => {
+        const icon = formatIcons[item.ext] || '';
+        const select = `
+          <select class="select-format" data-archive-idx="${idx}" ${processing ? 'disabled' : ''}>
+            ${allFormats.map(fmt => `<option value="${fmt}" ${fmt === (item.format || item.ext) ? 'selected' : ''}>${fmt.toUpperCase()}</option>`).join('')}
+          </select>
+        `;
+        archiveList.innerHTML += `
+          <div class="archive-item" data-archive-idx="${idx}">
+            <div>${icon}</div>
+            <span style="font-weight:bold">${item.name}</span>
+            <span style="color:#666;margin-left:10px;">${item.ext.toUpperCase()}</span>
+            ${select}
+            <button class="btn convert-btn" ${processing ? 'disabled' : ''}>${processing ? '<span class="spinner"></span>Processing...' : 'Convert'}</button>
+            <button class="btn archive-download download-btn" ${processing || ((item.format || item.ext) === item.ext && !archiveConverted[idx]) ? 'disabled' : ''}>Download</button>
+          </div>
+        `;
+      });
+      archiveList.innerHTML += `
+        <button class="btn zip-all" style="margin-top:1.6rem" ${processing ? 'disabled' : ''}>${processing ? '<span class="spinner"></span>Zipping...' : 'Download All as ZIP'}</button>
+      `;
+      // Events
+      archiveList.querySelectorAll('.select-format').forEach(sel => {
+        sel.onchange = e => {
+          const idx = Number(sel.getAttribute('data-archive-idx'));
+          archiveContents[idx].format = sel.value;
+          renderArchiveList(archiveContents, archiveConverted, onConvert, onDownload, onZipAll, processing);
+        };
+      });
+      archiveList.querySelectorAll('.convert-btn').forEach((btn, idx) => {
+        btn.onclick = () => onConvert(idx);
+      });
+      archiveList.querySelectorAll('.archive-download').forEach((btn, idx) => {
+        btn.onclick = () => onDownload(idx);
+      });
+      archiveList.querySelector('.zip-all').onclick = onZipAll;
+    }
+
+    // Main logic
+    let files = [];
+    let convertedFiles = {};
+    let archiveContents = [];
+    let archiveConverted = {};
+    let processing = false;
+
+    function resetAll() {
+      files = [];
+      convertedFiles = {};
+      archiveContents = [];
+      archiveConverted = {};
+      processing = false;
+      renderFilesList(files, convertedFiles, onConvertFile, onDownloadFile, processing);
+      renderArchiveList(archiveContents, archiveConverted, onConvertArchive, onDownloadArchive, onZipAll, processing);
+    }
+
+    // File upload
+    document.getElementById("fileInput").onchange = async (e) => {
+      resetAll();
+      const file = e.target.files[0];
+      if (!file) return;
+      const ext = detectFormat(file.name) || file.name.split('.').pop().toLowerCase();
+      if (ext === "zip") {
+        // Unzip and list files
+        const zip = new JSZip();
+        const loaded = await zip.loadAsync(file);
+        const filesInZip = [];
+        await Promise.all(Object.keys(loaded.files).map(async fname => {
+          const entry = loaded.files[fname];
+          if (!entry.dir) {
+            const blob = await entry.async("blob");
+            filesInZip.push({
+              name: fname,
+              file: new File([blob], fname),
+              ext: detectFormat(fname) || fname.split('.').pop().toLowerCase(),
+            });
+          }
+        }));
+        archiveContents = filesInZip;
+        archiveConverted = {};
+        renderArchiveList(archiveContents, archiveConverted, onConvertArchive, onDownloadArchive, onZipAll, processing);
+      } else {
+        files = [{ file, ext, format: ext, name: file.name }];
+        convertedFiles = {};
+        renderFilesList(files, convertedFiles, onConvertFile, onDownloadFile, processing);
+      }
+    };
+
+    // File actions
+    async function onConvertFile(i) {
+      processing = true;
+      renderFilesList(files, convertedFiles, onConvertFile, onDownloadFile, processing);
+      const { file, ext, format } = files[i];
+      convertedFiles[i] = await convertFile(file, ext, format);
+      processing = false;
+      renderFilesList(files, convertedFiles, onConvertFile, onDownloadFile, processing);
+    }
+
+    function onDownloadFile(i) {
+      const file = convertedFiles[i] || files[i].file;
+      saveAs(file, file.name);
+    }
+
+    // Archive actions
+    async function onConvertArchive(idx) {
+      processing = true;
+      renderArchiveList(archiveContents, archiveConverted, onConvertArchive, onDownloadArchive, onZipAll, processing);
+      const { file, ext, format } = archiveContents[idx];
+      archiveConverted[idx] = await convertFile(file, ext, format || ext);
+      processing = false;
+      renderArchiveList(archiveContents, archiveConverted, onConvertArchive, onDownloadArchive, onZipAll, processing);
+    }
+    function onDownloadArchive(idx) {
+      const file = archiveConverted[idx] || archiveContents[idx].file;
+      saveAs(file, file.name);
+    }
+    async function onZipAll() {
+      processing = true;
+      renderArchiveList(archiveContents, archiveConverted, onConvertArchive, onDownloadArchive, onZipAll, processing);
+      const zip = new JSZip();
+      for (let i = 0; i < archiveContents.length; ++i) {
+        let file = archiveConverted[i] || archiveContents[i].file;
+        zip.file(file.name, file);
+      }
+      const out = await zip.generateAsync({ type: "blob" });
+      saveAs(out, "ExhaConverter_Archive.zip");
+      processing = false;
+      renderArchiveList(archiveContents, archiveConverted, onConvertArchive, onDownloadArchive, onZipAll, processing);
+    }
+
+    // Initial render
+    renderFormatsList();
+    renderFilesList(files, convertedFiles, onConvertFile, onDownloadFile, processing);
+
+    // Set year
+    document.getElementById("year").textContent = (new Date()).getFullYear();
+
+    // Easter egg: drag and drop
+    document.body.ondragover = e => { e.preventDefault(); document.body.style.background = "linear-gradient(120deg,#ff7043 0%,#4e4376 100%)"; };
+    document.body.ondragleave = e => { e.preventDefault(); document.body.style.background = ""; };
+    document.body.ondrop = e => {
+      document.body.style.background = "";
+      e.preventDefault();
+      if (e.dataTransfer.files.length) {
+        document.getElementById("fileInput").files = e.dataTransfer.files;
+        const event = new Event("change");
+        document.getElementById("fileInput").dispatchEvent(event);
+      }
+    };
+  </script>
+</body>
+</html>
